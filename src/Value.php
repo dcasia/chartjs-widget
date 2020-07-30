@@ -1,10 +1,9 @@
 <?php
 
-namespace DigitalCreative\ChartWidget;
+namespace DigitalCreative\ChartJsWidget;
 
 use DigitalCreative\NovaDashboard\ValueResult;
 use Illuminate\Support\Collection;
-use RuntimeException;
 
 class Value extends ValueResult
 {

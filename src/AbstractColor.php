@@ -1,6 +1,6 @@
 <?php
 
-namespace DigitalCreative\ChartWidget;
+namespace DigitalCreative\ChartJsWidget;
 
 use JsonSerializable;
 

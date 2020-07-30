@@ -1,6 +1,6 @@
 <?php
 
-namespace DigitalCreative\ChartWidget;
+namespace DigitalCreative\ChartJsWidget;
 
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Events\ServingNova;
@@ -16,7 +16,7 @@ class WidgetServiceProvider extends ServiceProvider
     public function boot()
     {
         Nova::serving(function (ServingNova $event) {
-            Nova::script('chart-widget', __DIR__ . '/../dist/js/widget.js');
+            Nova::script('chartjs-widget', __DIR__ . '/../dist/js/widget.js');
         });
     }
 }
