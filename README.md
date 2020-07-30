@@ -18,12 +18,12 @@ declare(strict_types = 1);
 
 namespace App\Nova\Dashboards\Widgets;
 
-use DigitalCreative\ChartWidget\Color;
-use DigitalCreative\ChartWidget\DataSet;
-use DigitalCreative\ChartWidget\Gradient;
-use DigitalCreative\ChartWidget\LineChartWidget;
-use DigitalCreative\ChartWidget\Options;
-use DigitalCreative\ChartWidget\Value;
+use DigitalCreative\ChartJsWidget\Color;
+use DigitalCreative\ChartJsWidget\DataSet;
+use DigitalCreative\ChartJsWidget\Gradient;
+use DigitalCreative\ChartJsWidget\LineChartWidget;
+use DigitalCreative\ChartJsWidget\Options;
+use DigitalCreative\ChartJsWidget\Value;
 use DigitalCreative\NovaDashboard\Filters;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Fields\Select;
@@ -96,9 +96,9 @@ class SampleLineChart extends LineChartWidget
         }
 
         return Value::make()
-                    ->labels(getData())
+                    ->labels($this->getRandomData())
                     ->add(
-                        DataSet::make('Hello', getData(), $baseConfiguration->color([ '#FAD961', '#F76B1C' ])
+                        DataSet::make('Hello', $this->getRandomData(), $baseConfiguration->color([ '#FAD961', '#F76B1C' ])
                                                                             ->pointBorderColor('white')
                     ));
 
