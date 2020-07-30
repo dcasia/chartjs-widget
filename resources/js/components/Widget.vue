@@ -4,14 +4,20 @@
 
         <template v-slot="{ value }">
 
+            <div class="flex flex-col">
 
-            <LineChart ref="chart"
-                       class="relative w-full h-full"
-                       :width="width"
-                       :height="height"
-                       :options="options"
-                       :chart-data="value"/>
+                <div v-if="meta.options.title" class="px-6 py-4 text-base text-80 font-bold">
+                    {{ meta.options.title }}
+                </div>
 
+                <LineChart ref="chart"
+                           class="absolute flex-1 w-full h-full z-1"
+                           :width="width"
+                           :height="height"
+                           :options="meta.options"
+                           :chart-data="value"/>
+
+            </div>
 
         </template>
 
@@ -20,52 +26,53 @@
 </template>
 
 <script>
-// interface Meta {
-// }
-// interface Coordinates {
-//     width: number,
-//     height: number,
-//     x: number,
-//     y: number
-// }
 
-import LineChart from './LineChart'
+    // interface Meta {
+    // }
+    // interface Coordinates {
+    //     width: number,
+    //     height: number,
+    //     x: number,
+    //     y: number
+    // }
 
-export default {
-    name: 'ChartWidget',
-    components: { LineChart },
-    props: {
-        meta: { type: Object, default: null },
-        card: { type: Object, default: null },
-        coordinates: { type: Object }
-    },
-    data() {
-        return {
-            collection: null,
-            options: null,
-            width: 0,
-            height: 0,
-        }
-    },
-    mounted() {
+    import LineChart from './LineChart'
 
-        console.log(this.meta)
-
-        this.$nextTick(() => {
-
-            this.width = this.$el.clientWidth
-            this.height = this.$el.clientHeight
-
-        })
-
-    },
-    computed: {
-        options() {
-            if (this.meta) {
-                return this.meta.options
+    export default {
+        name: 'ChartWidget',
+        components: { LineChart },
+        props: {
+            meta: { type: Object, default: null },
+            card: { type: Object, default: null },
+            coordinates: { type: Object }
+        },
+        data() {
+            return {
+                collection: null,
+                options: null,
+                width: 0,
+                height: 0
             }
-            return this.card.options
+        },
+        created() {
+
+            this.$nextTick(() => {
+
+                this.width = this.$el.clientWidth
+                this.height = this.$el.clientHeight
+
+            })
+
+        },
+        computed: {
+            options() {
+                if (this.meta) {
+                    return this.meta.options
+                }
+                return this.card.options
+            }
         }
+
     }
-}
+
 </script>

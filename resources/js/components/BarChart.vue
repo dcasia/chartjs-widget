@@ -1,11 +1,9 @@
 <script>
 
-import { Line } from 'vue-chartjs'
-import Common from '../common'
+import { Bar } from 'vue-chartjs'
 
 export default {
-    extends: Line,
-    mixins: [ Common ],
+    extends: Bar,
     props: {
         chartData: {
             type: Object,
@@ -14,10 +12,19 @@ export default {
         options: {
             type: Object,
             default: null
+        },
+        width: {
+            type: Number,
+            default: 0
+        },
+        height: {
+            type: Number,
+            default: 0
         }
     },
     mounted() {
 
+        const context = this.$refs.canvas.getContext('2d')
         const defaults = {
             pointBorderWidth: 8,
             pointHoverRadius: 10,
@@ -25,6 +32,28 @@ export default {
             pointRadius: 4,
             borderWidth: 4,
             cubicInterpolationMode: 'monotone'
+        }
+
+        const parseColor = (colorPayload) => {
+
+            if (!colorPayload) {
+
+                return 'black'
+
+            }
+
+            if (colorPayload.type === 'solid') {
+
+                return colorPayload.color
+
+            }
+
+            if (colorPayload.type === 'gradient') {
+
+                return this.generateGradient(context, colorPayload.colors, colorPayload.direction)
+
+            }
+
         }
 
         const data = {
@@ -47,14 +76,14 @@ export default {
 
                 return {
                     ...options,
-                    backgroundColor: this.parseColor(backgroundColor),
-                    borderColor: this.parseColor(borderColor),
-                    hoverBackgroundColor: this.parseColor(hoverBackgroundColor),
-                    hoverBorderColor: this.parseColor(hoverBorderColor),
-                    pointBackgroundColor: this.parseColor(pointBackgroundColor),
-                    pointBorderColor: this.parseColor(pointBorderColor),
-                    pointHoverBackgroundColor: this.parseColor(pointHoverBackgroundColor),
-                    pointHoverBorderColor: this.parseColor(pointHoverBorderColor),
+                    backgroundColor: parseColor(backgroundColor),
+                    borderColor: parseColor(borderColor),
+                    hoverBackgroundColor: parseColor(hoverBackgroundColor),
+                    hoverBorderColor: parseColor(hoverBorderColor),
+                    pointBackgroundColor: parseColor(pointBackgroundColor),
+                    pointBorderColor: parseColor(pointBorderColor),
+                    pointHoverBackgroundColor: parseColor(pointHoverBackgroundColor),
+                    pointHoverBorderColor: parseColor(pointHoverBorderColor),
                     label,
                     data
                 }
@@ -121,6 +150,50 @@ export default {
 
         this.renderChart(data, options)
 
+    },
+    methods: {
+        generateGradient(context, colors, direction) {
+
+            let gradient
+
+            /**
+             * Horizontal
+             */
+            if (direction === 0) {
+
+                gradient = context.createLinearGradient(0, 0, this.width, 0)
+
+            } else if (direction === 1) {
+
+                gradient = context.createLinearGradient(0, 0, 0, this.height)
+
+            }
+
+            if (Array.isArray(colors)) {
+
+                colors.forEach((color, index) => {
+                    gradient.addColorStop(index / (colors.length - 1), color)
+                })
+
+            } else {
+
+                Object.keys(colors).forEach(stop => {
+
+                    gradient.addColorStop(stop / 100, colors[ stop ])
+
+                })
+
+            }
+
+            return gradient
+
+        },
+        relativeHeight(number) {
+            return (this.height * number) / 100
+        },
+        relativeWidth(number) {
+            return (this.width * number) / 100
+        }
     }
 }
 
