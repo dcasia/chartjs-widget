@@ -1,5 +1,5 @@
 {
-    "name": "digital-creative/chart-widget",
+    "name": "digital-creative/chartjs-widget",
     "description": "A Laravel Nova asset.",
     "keywords": [
         "laravel",
@@ -11,13 +11,13 @@
     },
     "autoload": {
         "psr-4": {
-            "DigitalCreative\\ChartWidget\\": "src/"
+            "DigitalCreative\\ChartJsWidget\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "DigitalCreative\\ChartWidget\\WidgetServiceProvider"
+                "DigitalCreative\\ChartJsWidget\\WidgetServiceProvider"
             ]
         }
     },
