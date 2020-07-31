@@ -12,6 +12,7 @@
 
                 <component :is="component"
                            class="absolute flex-1 w-full h-full z-1"
+                           :coordinates="coordinates"
                            :extra="meta.meta"
                            :width="width"
                            :height="height"

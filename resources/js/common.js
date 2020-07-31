@@ -19,9 +19,19 @@ export default {
         options: {
             type: Object,
             default: null
+        },
+        coordinates: {
+            type: Object,
+            required: true
         }
     },
     mounted() {
+
+        this.$watch(() => (this.coordinates.height, this.coordinates.width), () => {
+
+            this.$data._chart.update()
+
+        })
 
         const defaults = {
             pointBorderWidth: 8,
