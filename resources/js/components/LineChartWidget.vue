@@ -1,11 +1,11 @@
 <script>
 
-import BaseWidget from './BaseWidget'
+import Widget from './Widget'
 import LineChart from './LineChart'
 
 export default {
     name: 'LineChartWidget',
-    extends: BaseWidget,
+    extends: Widget,
     data() {
         return {
             component: LineChart

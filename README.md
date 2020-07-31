@@ -33,7 +33,7 @@ class SampleLineChart extends LineChartWidget
 
     public const SOURCE = 'source';
     public const SOURCE_SAMPLE1 = 'sample1';
-    public const SOURCE_SAMPLE2 = 'source2';
+    public const SOURCE_SAMPLE2 = 'sample2';
 
     public function getRandomData($min = 1, $max = 100): array
     {
@@ -75,7 +75,7 @@ class SampleLineChart extends LineChartWidget
                                                    ->color('#00c6fb')
                                                    ->pointBorderColor(new Color('white'))
                                                    ->backgroundColor(
-                                                       new Gradient([ 'rgba(0, 198, 251, .8)', 'rgba(255,255,255,0)', Gradient::VERTICAL ])
+                                                       new Gradient([ 'rgba(0, 198, 251, .8)', 'rgba(255,255,255,0)' ], Gradient::VERTICAL)
                                                    );
 
             $set2Configuration = $baseConfiguration->clone()

@@ -10,8 +10,9 @@
                     {{ meta.options.title }}
                 </div>
 
-                <LineChart ref="chart"
+                <component :is="component"
                            class="absolute flex-1 w-full h-full z-1"
+                           :extra="meta.meta"
                            :width="width"
                            :height="height"
                            :options="meta.options"
@@ -27,52 +28,46 @@
 
 <script>
 
-    // interface Meta {
-    // }
-    // interface Coordinates {
-    //     width: number,
-    //     height: number,
-    //     x: number,
-    //     y: number
-    // }
+import 'chartjs-plugin-colorschemes'
 
-    import LineChart from './LineChart'
-
-    export default {
-        name: 'ChartWidget',
-        components: { LineChart },
-        props: {
-            meta: { type: Object, default: null },
-            card: { type: Object, default: null },
-            coordinates: { type: Object }
-        },
-        data() {
-            return {
-                collection: null,
-                options: null,
-                width: 0,
-                height: 0
-            }
-        },
-        created() {
-
-            this.$nextTick(() => {
-
-                this.width = this.$el.clientWidth
-                this.height = this.$el.clientHeight
-
-            })
-
-        },
-        computed: {
-            options() {
-                if (this.meta) {
-                    return this.meta.options
-                }
-                return this.card.options
-            }
+export default {
+    name: 'ChartJsWidget',
+    props: {
+        meta: { type: Object, default: null },
+        card: { type: Object, default: null },
+        coordinates: { type: Object }
+    },
+    data() {
+        return {
+            component: null,
+            width: 0,
+            height: 0
         }
+    },
+    created() {
 
+        this.$nextTick(() => {
+
+            this.width = this.$el.clientWidth
+            this.height = this.$el.clientHeight
+
+        })
+
+    },
+    computed: {
+        options() {
+
+            if (this.meta) {
+
+                return this.meta.options
+
+            }
+
+            return this.card.options
+
+        }
     }
+
+}
 
 </script>

@@ -147,6 +147,15 @@ abstract class LineChartWidget extends Widget
         ];
     }
 
+    /**
+     * See link bellow for all possible values that can be given to this function
+     *
+     * @link https://nagix.github.io/chartjs-plugin-colorschemes/colorchart.html
+     *
+     * @param string $colorScheme
+     *
+     * @return $this
+     */
     public function colorScheme(string $colorScheme): self
     {
         return $this->withMeta([ 'colorScheme' => $colorScheme ]);
