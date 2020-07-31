@@ -7,6 +7,10 @@ export default {
     extends: Line,
     mixins: [ Common ],
     props: {
+        extra: {
+            type: Object,
+            default: () => ({})
+        },
         chartData: {
             type: Object,
             default: null
@@ -65,6 +69,11 @@ export default {
         const options = {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+                colorschemes: {
+                    scheme: this.options.colorScheme ?? this.extra.colorScheme ?? 'office.Yellow6'
+                }
+            },
             legend: {
                 display: this.options.showLegend,
                 position: this.options.positioning,

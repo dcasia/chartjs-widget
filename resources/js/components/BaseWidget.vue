@@ -12,6 +12,7 @@
 
                 <component :is="component"
                            class="absolute flex-1 w-full h-full z-1"
+                           :extra="meta.meta"
                            :width="width"
                            :height="height"
                            :options="meta.options"
@@ -27,14 +28,7 @@
 
 <script>
 
-// interface Meta {
-// }
-// interface Coordinates {
-//     width: number,
-//     height: number,
-//     x: number,
-//     y: number
-// }
+import 'chartjs-plugin-colorschemes';
 
 
 export default {

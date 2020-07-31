@@ -25,7 +25,7 @@ export default {
 
             if (!colorPayload) {
 
-                return 'black'
+                return undefined
 
             }
 

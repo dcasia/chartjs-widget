@@ -16,6 +16,7 @@ abstract class LineChartWidget extends Widget
 {
 
     public const TITLE = 'title';
+    public const COLOR_SCHEME = 'colorScheme';
 
     public const TOOLTIPS = 'tooltips';
 
@@ -63,6 +64,11 @@ abstract class LineChartWidget extends Widget
             Text::make(__('Title'), static::TITLE)->default(static function () {
                 return Str::title(Str::snake(class_basename(static::class), ' '));
             }),
+
+            Text::make(__('Color Scheme'), static::COLOR_SCHEME)
+                ->default('tableau.Classic10')
+                ->rules([ 'startsWith:brewer.,office.,tableau.', 'nullable' ])
+                ->help(__('See: :link for available options.', [ 'link' => '<a target="_blank" href="https://nagix.github.io/chartjs-plugin-colorschemes/colorchart.html">#color-schema</a>' ])),
 
             KeyValue::make(__('Padding'), static::PADDING)
                     ->disableEditingKeys()
@@ -139,6 +145,11 @@ abstract class LineChartWidget extends Widget
             Number::make(__('Tick Padding'), static::VERTICAL_AXIS_TICK_PADDING)->default(0),
 
         ];
+    }
+
+    public function colorScheme(string $colorScheme): self
+    {
+        return $this->withMeta([ 'colorScheme' => $colorScheme ]);
     }
 
 }
