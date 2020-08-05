@@ -22,8 +22,8 @@ use DigitalCreative\ChartJsWidget\Color;
 use DigitalCreative\ChartJsWidget\DataSet;
 use DigitalCreative\ChartJsWidget\Gradient;
 use DigitalCreative\ChartJsWidget\LineChartWidget;
-use DigitalCreative\ChartJsWidget\Options;
-use DigitalCreative\ChartJsWidget\Value;
+use DigitalCreative\ChartJsWidget\Style;
+use DigitalCreative\ChartJsWidget\ValueResult;
 use DigitalCreative\NovaDashboard\Filters;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Fields\Select;
@@ -50,13 +50,13 @@ class SampleLineChart extends LineChartWidget
         ];
     }
 
-    public function resolveValue(Collection $options, Filters $filters): Value
+    public function resolveValue(Collection $options, Filters $filters): ValueResult
     {
 
         /**
          * Some basic stylish settings
          */
-        $baseConfiguration = Options::make()
+        $baseConfiguration = Style::make()
                                     ->fill('origin')
                                     ->pointBorderWidth(2)
                                     ->pointHitRadius(10)
@@ -87,17 +87,17 @@ class SampleLineChart extends LineChartWidget
             $dataset1 = DataSet::make('Sample 1', $this->getRandomData(), $set1Configuration);
             $dataset2 = DataSet::make('Sample 2', $this->getRandomData(), $set2Configuration);
 
-            return Value::make()
+            return ValueResult::make()
                         ->labels($this->getRandomData())
-                        ->add(
+                        ->addDataset(
                             $dataset1, $dataset2
                         );
 
         }
 
-        return Value::make()
+        return ValueResult::make()
                     ->labels($this->getRandomData())
-                    ->add(
+                    ->addDataset(
                         DataSet::make('Hello', $this->getRandomData(), $baseConfiguration->color([ '#FAD961', '#F76B1C' ])
                                                                             ->pointBorderColor('white')
                     ));

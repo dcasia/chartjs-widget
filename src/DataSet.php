@@ -58,7 +58,7 @@ class DataSet extends Fluent
      *
      * @param string $label
      * @param array $data
-     * @param array|Options $options
+     * @param array|Style $options
      */
     public function __construct(string $label, array $data, $options = [])
     {
@@ -76,7 +76,7 @@ class DataSet extends Fluent
 
         }
 
-        $this->attributes = array_merge($options instanceof Options ? $options->jsonSerialize() : $options, $this->attributes);
+        $this->attributes = array_merge($options instanceof Style ? $options->jsonSerialize() : $options, $this->attributes);
 
     }
 

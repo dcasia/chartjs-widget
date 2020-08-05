@@ -2,7 +2,10 @@
 
 namespace DigitalCreative\ChartJsWidget;
 
+use DigitalCreative\NovaDashboard\WidgetOptionTab;
+use DigitalCreative\NovaDashboard\Filters;
 use DigitalCreative\NovaDashboard\Widget;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BooleanGroup;
@@ -15,49 +18,21 @@ use Laravel\Nova\Fields\Text;
 abstract class LineChartWidget extends Widget
 {
 
-    public const TITLE = 'title';
-    public const COLOR_SCHEME = 'colorScheme';
-
-    public const TOOLTIPS = 'tooltips';
-
-    public const TOOLTIP_SETTINGS = 'tooltipSettings';
-    public const TOOLTIP_SHOW = 'show';
-    public const TOOLTIP_INTERSECT = 'intersect';
-    public const TOOLTIP_SHOW_COLORS = 'showColors';
-
-    public const PADDING = 'padding';
-    public const PADDING_LEFT = 'left';
-    public const PADDING_RIGHT = 'right';
-    public const PADDING_TOP = 'top';
-    public const PADDING_BOTTOM = 'bottom';
-
-    public const SHOW_LEGEND = 'showLegend';
-
-    public const LEGEND_POSITIONING = 'positioning';
-    public const LEGEND_POSITIONING_TOP = 'top';
-    public const LEGEND_POSITIONING_LEFT = 'left';
-    public const LEGEND_POSITIONING_BOTTOM = 'bottom';
-    public const LEGEND_POSITIONING_RIGHT = 'right';
-
-    public const LEGEND_ALIGNMENT = 'alignment';
-    public const LEGEND_ALIGNMENT_START = 'start';
-    public const LEGEND_ALIGNMENT_CENTER = 'center';
-    public const LEGEND_ALIGNMENT_END = 'end';
-
-    public const HORIZONTAL_AXIS = 'horizontalAxis';
-    public const VERTICAL_AXIS = 'verticalAxis';
-    public const AXIS_DISPLAY = 'display';
-    public const AXIS_SHOW_GRID_LINES = 'showGridLines';
-    public const AXIS_SHOW_GRID_LINES_BORDER = 'showGridLinesBorder';
-    public const HORIZONTAL_AXIS_TICK_PADDING = 'horizontalAxisTicksPadding';
-    public const VERTICAL_AXIS_TICK_PADDING = 'verticalAxisTicksPadding';
+    public function resolveWidgetOptions()
+    {
+        return new WidgetOptionTab('Options', [
+            'legend' => [
+                'display' => false
+            ]
+        ]);
+    }
 
     public function component(): string
     {
         return 'line-chart-widget';
     }
 
-    public function fields(): array
+    public function settings(): array
     {
         return [
 
@@ -132,6 +107,7 @@ abstract class LineChartWidget extends Widget
                         ]),
 
             Number::make(__('Tick Padding'), static::HORIZONTAL_AXIS_TICK_PADDING)->default(0),
+            Number::make(__('Tick Line Height'), static::HORIZONTAL_AXIS_TICK_LINE_HEIGHT)->default(1),
 
             Heading::make(__('Vertical Axis (yAxes)')),
 
@@ -143,6 +119,7 @@ abstract class LineChartWidget extends Widget
                         ]),
 
             Number::make(__('Tick Padding'), static::VERTICAL_AXIS_TICK_PADDING)->default(0),
+            Number::make(__('Tick Line Height'), static::VERTICAL_AXIS_TICK_LINE_HEIGHT)->default(1),
 
         ];
     }
@@ -159,6 +136,11 @@ abstract class LineChartWidget extends Widget
     public function colorScheme(string $colorScheme): self
     {
         return $this->withMeta([ 'colorScheme' => $colorScheme ]);
+    }
+
+    public function value(): ValueResult
+    {
+        return new ValueResult();
     }
 
 }

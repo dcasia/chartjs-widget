@@ -49,26 +49,59 @@ use Laravel\Nova\Makeable;
  * @property array|null data
  * @package DigitalCreative\Options
  */
-class Options extends Fluent
+class Style extends Fluent
 {
     use Makeable;
 
     /**
+     * Alias to set backgroundColor and hoverBackgroundColor
+     *
+     * @param AbstractColor|string|array $color
+     *
+     * @return $this
+     */
+    public function background($color): self
+    {
+        return $this->clone()->setColorIfNotExist($color, [
+            'backgroundColor',
+            'hoverBackgroundColor',
+        ]);
+    }
+
+    /**
+     * Alias to set point and border colors
+     *
      * @param AbstractColor|string|array $color
      *
      * @return $this
      */
     public function color($color): self
     {
-        return $this
-//            ->backgroundColor($color)
-//            ->hoverBackgroundColor($color)
-            ->borderColor($color)
-            ->hoverBorderColor($color)
-            ->pointBackgroundColor($color)
-            ->pointBorderColor($color)
-            ->pointHoverBackgroundColor($color)
-            ->pointHoverBorderColor($color);
+        return $this->clone()->setColorIfNotExist($color, [
+            'borderColor',
+            'hoverBorderColor',
+            'pointBackgroundColor',
+            'pointBorderColor',
+            'pointHoverBackgroundColor',
+            'pointHoverBorderColor',
+        ]);
+    }
+
+    public function setColorIfNotExist($color, array $properties): self
+    {
+
+        foreach ($properties as $property) {
+
+            if ($this->offsetExists($property) === false) {
+
+                $this->offsetSet($property, $color);
+
+            }
+
+        }
+
+        return $this;
+
     }
 
     public function clone(): self
@@ -79,7 +112,7 @@ class Options extends Fluent
     /**
      * Batch set options without passing params by params
      *
-     * @param array|Options $data
+     * @param array|Style $data
      *
      * @return $this
      */

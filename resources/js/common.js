@@ -10,7 +10,7 @@ export default {
         },
         extra: {
             type: Object,
-            default: () => ({})
+            default: () => ( {} )
         },
         chartData: {
             type: Object,
@@ -23,22 +23,27 @@ export default {
         coordinates: {
             type: Object,
             required: true
+        },
+        namespace: {
+            type: String,
+            required: true
         }
     },
     mounted() {
 
-        this.$watch(() => (this.coordinates.height, this.coordinates.width), () => {
-
+        const unWatch = this.$watch(() => ( this.coordinates.height, this.coordinates.width ), () => {
             this.$data._chart.update()
-
         })
 
+        this.$on('hook:beforeDestroy', () => unWatch())
+
         const defaults = {
-            pointBorderWidth: 8,
-            pointHoverRadius: 10,
-            pointHoverBorderWidth: 5,
-            pointRadius: 4,
-            borderWidth: 4,
+            borderWidth: 2,
+            pointBorderWidth: 2,
+            pointHitRadius: 10,
+            pointRadius: 3,
+            pointHoverBorderWidth: 2,
+            pointHoverRadius: 4,
             cubicInterpolationMode: 'monotone'
         }
 
@@ -77,82 +82,27 @@ export default {
             })
         }
 
-        const options = {
+        this.renderChart(data, {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                colorschemes: {
-                    scheme: this.options.colorScheme ?? this.extra.colorScheme ?? 'office.Yellow6'
-                }
-            },
-            legend: {
-                display: this.options.showLegend,
-                position: this.options.positioning,
-                align: this.options.alignment,
-                labels: {
-                    fontFamily: 'Nunito',
-                    usePointStyle: true,
-                    padding: 8,
-                    boxWidth: 8
-                }
-            },
-            layout: {
-                padding: this.options.padding
-            },
-            tooltips: {
-                titleFontFamily: 'Nunito',
-                footerFontFamily: 'Nurito',
-                bodyFontFamily: 'Nunito',
-                titleAlign: 'center',
-                ...this.options.tooltips,
-                displayColors: this.options.tooltipSettings?.showColors,
-                intersect: this.options.tooltipSettings?.intersect,
-                enabled: this.options.tooltipSettings?.show
-            },
-            scales: {
-                xAxes: [
-                    {
-                        display: this.options.horizontalAxis.display,
-                        gridLines: {
-                            display: this.options.horizontalAxis.showGridLines,
-                            drawBorder: this.options.horizontalAxis.showGridLinesBorder
-                        },
-                        ticks: {
-                            lineHeight: 5,
-                            padding: this.options.horizontalAxisTicksPadding
-                        }
-                    }
-                ],
-                yAxes: [
-                    {
-                        display: this.options.verticalAxis.display,
-                        gridLines: {
-                            display: this.options.verticalAxis.showGridLines,
-                            drawBorder: this.options.verticalAxis.showGridLinesBorder
-                        },
-                        ticks: {
-                            lineHeight: 5,
-                            padding: this.options.verticalAxisTicksPadding
-                        }
-                    }
-                ]
-            }
-        }
-
-        this.renderChart(data, options)
+            ...this.options
+        })
 
     },
     computed: {
+        options() {
+            return this.$store.getters[ `${ this.namespace }/options` ]
+        },
         context() {
             return this.$refs.canvas.getContext('2d')
         }
     },
     methods: {
         relativeHeight(number) {
-            return (this.height * number) / 100
+            return ( this.height * number ) / 100
         },
         relativeWidth(number) {
-            return (this.width * number) / 100
+            return ( this.width * number ) / 100
         },
         parseColor(colorPayload) {
 
@@ -195,7 +145,7 @@ export default {
             if (Array.isArray(colors)) {
 
                 colors.forEach((color, index) => {
-                    gradient.addColorStop(index / (colors.length - 1), color)
+                    gradient.addColorStop(index / ( colors.length - 1 ), color)
                 })
 
             } else {
