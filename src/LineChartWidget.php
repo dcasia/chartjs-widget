@@ -18,7 +18,7 @@ use Laravel\Nova\Fields\Text;
 abstract class LineChartWidget extends Widget
 {
 
-    public function resolveWidgetOptions()
+    public function widgetFields()
     {
         return new WidgetOptionTab('Options', [
             'legend' => [

@@ -12,7 +12,7 @@ use Timothyasp\Color\Color as ColorField;
 abstract class BarChartWidget extends LineChartWidget
 {
 
-    public function resolveWidgetOptions()
+    public function widgetFields()
     {
         return [
             new WidgetOptionTab('Layout', [
