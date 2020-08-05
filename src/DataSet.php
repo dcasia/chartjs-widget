@@ -2,6 +2,7 @@
 
 namespace DigitalCreative\ChartJsWidget;
 
+use DigitalCreative\ChartJsWidget\Formatters\Formatter;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Fluent;
 use Laravel\Nova\Makeable;
@@ -78,6 +79,20 @@ class DataSet extends Fluent
 
         $this->attributes = array_merge($options instanceof Style ? $options->jsonSerialize() : $options, $this->attributes);
 
+    }
+
+    public function tooltipFormatter(Formatter $formatter): self
+    {
+        $this->offsetSet('tooltipFormatter', $formatter);
+
+        return $this;
+    }
+
+    public function tooltipTitleFormatter(Formatter $formatter): self
+    {
+        $this->offsetSet('tooltipTitleFormatter', $formatter);
+
+        return $this;
     }
 
 }

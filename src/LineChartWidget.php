@@ -2,10 +2,8 @@
 
 namespace DigitalCreative\ChartJsWidget;
 
-use DigitalCreative\NovaDashboard\WidgetOptionTab;
-use DigitalCreative\NovaDashboard\Filters;
 use DigitalCreative\NovaDashboard\Widget;
-use Illuminate\Support\Collection;
+use DigitalCreative\NovaDashboard\WidgetOptionTab;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BooleanGroup;
@@ -14,17 +12,185 @@ use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Timothyasp\Color\Color as ColorField;
 
 abstract class LineChartWidget extends Widget
 {
 
     public function widgetFields()
     {
-        return new WidgetOptionTab('Options', [
-            'legend' => [
-                'display' => false
-            ]
-        ]);
+        return [
+            new WidgetOptionTab('Layout', [
+                'layout' => [
+                    'padding' => static function (string $attribute) {
+                        return KeyValue::make(__('Padding'), $attribute)
+                                       ->disableDeletingRows()
+                                       ->disableEditingKeys()
+                                       ->disableAddingRows()
+                                       ->default([
+                                           'top' => 50,
+                                           'left' => 30,
+                                           'right' => 30,
+                                           'bottom' => 10,
+                                       ]);
+                    },
+                ],
+            ]),
+            new WidgetOptionTab('Legend', [
+                'legend' => [
+                    'display' => static function (string $attribute) {
+                        return Boolean::make(__('Display'), $attribute)->default(true);
+                    },
+                    'reverse' => static function (string $attribute) {
+                        return Boolean::make(__('Reverse'), $attribute)
+                                      ->default(false)
+                                      ->help('Legend will show datasets in reverse order.');
+                    },
+                    'position' => static function (string $attribute) {
+                        return Select::make(__('Position'), $attribute)
+                                     ->default('bottom')
+                                     ->options([
+                                         'top' => __('Top'),
+                                         'left' => __('Left'),
+                                         'right' => __('Right'),
+                                         'bottom' => __('Bottom'),
+                                     ]);
+                    },
+                    'align' => static function (string $attribute) {
+                        return Select::make(__('Align'), $attribute)
+                                     ->default(fn() => 'center')
+                                     ->options([
+                                         'start' => __('Start'),
+                                         'center' => __('Center'),
+                                         'end' => __('End'),
+                                     ]);
+                    },
+                    'labels' => [
+                        'boxWidth' => static function (string $attribute) {
+                            return Number::make(__('Box Width'), $attribute)->default(8)->help('Width of coloured box.');
+                        },
+                        'boxHeight' => static function (string $attribute) {
+                            return Number::make(__('Box Height'), $attribute)->default(8)->help('Width of coloured box.');
+                        },
+                        'padding' => static function (string $attribute) {
+                            return Number::make(__('Padding'), $attribute)->default(10)->help('Padding between rows of colored boxes.');
+                        },
+                        'fontColor' => static function (string $attribute) {
+                            return ColorField::make(__('Font Color'), $attribute)->sketch();
+                        },
+                        'fontSize' => static function (string $attribute) {
+                            return Number::make(__('Font Size'), $attribute)->default(12)->help('Width of coloured box.');
+                        },
+                        'usePointStyle' => static function (string $attribute) {
+                            return Boolean::make(__('Use Point Style'), $attribute)
+                                          ->default(true)
+                                          ->help('Label style will match corresponding point style (size is based on the minimum value between boxWidth and fontSize).');
+                        },
+                    ],
+                ],
+            ]),
+            new WidgetOptionTab('Tooltips', [
+                'tooltips' => [
+                    'enabled' => static function (string $attribute) {
+                        return Boolean::make(__('Enabled'), $attribute)->default(true);
+                    },
+                    'intersect' => static function (string $attribute) {
+                        return Boolean::make(__('Intersect'), $attribute)
+                                      ->default(true)
+                                      ->help('If true, the tooltip mode applies only when the mouse position intersects with an element. If false, the mode will be applied at all times.');
+
+                    },
+                    'mode' => static function (string $attribute) {
+                        return Select::make(__('Mode'), $attribute)
+                                     ->default('nearest')
+                                     ->help('Sets which elements appear in the tooltip.')
+                                     ->options([
+                                         'nearest' => __('Nearest'),
+                                         'point' => __('Point'),
+                                         'index' => __('Index'),
+                                         'dataset' => __('Dataset'),
+                                         'x' => __('X'),
+                                         'y' => __('Y'),
+                                     ]);
+                    },
+                    'backgroundColor' => static function (string $attribute) {
+                        return ColorField::make(__('Background Color'), $attribute)
+                                         ->sketch()
+                                         ->default('rgba(0, 0, 0, 0.8)');
+                    },
+                    'position' => static function (string $attribute) {
+                        return Select::make(__('Position'), $attribute)
+                                     ->default('average')
+                                     ->help('The mode for positioning the tooltip.')
+                                     ->options([
+                                         'average' => __('Average'),
+                                         'nearest' => __('Nearest'),
+                                     ]);
+                    },
+                ],
+            ]),
+            new WidgetOptionTab('Scales', [
+                'scales' => [
+                    'xAxes' => [
+                        $this->getAxesOptions([
+                            'position' => static function (string $attribute) {
+                                return Select::make(__('Position'), $attribute)
+                                             ->default('bottom')
+                                             ->options([
+                                                 'top' => __('Top'),
+                                                 'bottom' => __('Bottom'),
+                                             ])
+                                             ->help('Position of the axis in the chart.');
+                            },
+                        ]),
+                    ],
+                    'yAxes' => [
+                        $this->getAxesOptions([
+                            'display' => static function (string $attribute) {
+                                return Boolean::make(__('Display'), $attribute)->default(false);
+                            },
+                            'position' => static function (string $attribute) {
+                                return Select::make(__('Position'), $attribute)
+                                             ->default('left')
+                                             ->options([
+                                                 'left' => __('Left'),
+                                                 'right' => __('Right'),
+                                             ])
+                                             ->help('Position of the axis in the chart.');
+                            },
+                        ]),
+                    ],
+                ],
+            ]),
+        ];
+    }
+
+    private function getAxesOptions(array $extra = []): array
+    {
+        return array_merge([
+            'display' => static function (string $attribute) {
+                return Boolean::make(__('Display'), $attribute)->default(true);
+            },
+            /**
+             * https://www.chartjs.org/docs/latest/axes/styling.html#grid-line-configuration
+             */
+            'ticks' => [
+                'padding' => static function (string $attribute) {
+                    return Number::make(__('Padding'), $attribute)->default(0)->help('Padding between the tick label and the axis. When set on a vertical axis, this applies in the horizontal (X) direction. When set on a horizontal axis, this applies in the vertical (Y) direction.');
+                },
+            ],
+            'gridLines' => [
+                'display' => static function (string $attribute) {
+                    return Boolean::make(__('Display'), $attribute)
+                                  ->default(true)
+                                  ->help('If false, do not display grid lines for this axis.');
+                },
+                'circular' => static function (string $attribute) {
+                    return Boolean::make(__('Circular'), $attribute)
+                                  ->help('If true, gridlines are circular (on radar chart only).');
+                },
+            ],
+        ], $extra);
     }
 
     public function component(): string

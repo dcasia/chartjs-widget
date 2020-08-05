@@ -1,3 +1,5 @@
+import commaNumber from 'comma-number'
+
 export default {
     props: {
         width: {
@@ -10,7 +12,7 @@ export default {
         },
         extra: {
             type: Object,
-            default: () => ( {} )
+            default: () => ({})
         },
         chartData: {
             type: Object,
@@ -31,14 +33,14 @@ export default {
     },
     mounted() {
 
-        const unWatch = this.$watch(() => ( this.coordinates.height, this.coordinates.width ), () => {
+        const unWatch = this.$watch(() => (this.coordinates.height, this.coordinates.width), () => {
             this.$data._chart.update()
         })
 
         this.$on('hook:beforeDestroy', () => unWatch())
 
         const defaults = {
-            borderWidth: 2,
+            borderWidth: 0,
             pointBorderWidth: 2,
             pointHitRadius: 10,
             pointRadius: 3,
@@ -82,11 +84,58 @@ export default {
             })
         }
 
-        this.renderChart(data, {
+        this.renderChart(data, _.defaultsDeep({
             responsive: true,
             maintainAspectRatio: false,
-            ...this.options
-        })
+            tooltips: {
+                displayColors: false,
+                callbacks: {
+                    title: (tooltipItems, data) => {
+
+                        const items = []
+
+                        for (const item of tooltipItems) {
+
+                            const formatter = data.datasets[ item.datasetIndex ].tooltipTitleFormatter
+
+                            if (formatter) {
+
+                                items.push(this.formatTitle(formatter, item, data))
+
+                            } else {
+
+                                items.push(item.label)
+
+                            }
+
+                        }
+
+                        return _.filter(items)
+
+                    },
+                    label: (tooltipItem, data) => {
+
+                        let label = data.datasets[ tooltipItem.datasetIndex ].label || ''
+                        const formatter = data.datasets[ tooltipItem.datasetIndex ].tooltipFormatter
+
+                        if (formatter) {
+
+                            return this.formatLabel(formatter, label, tooltipItem, data)
+
+                        }
+
+                        if (label) {
+
+                            label += ': '
+
+                        }
+
+                        return label + tooltipItem.value
+
+                    }
+                }
+            }
+        }, this.options))
 
     },
     computed: {
@@ -98,11 +147,55 @@ export default {
         }
     },
     methods: {
+        formatTitle(formatter, tooltipItem, data) {
+
+            if (formatter.type === 'no-title-formatter') {
+
+                return null
+
+            }
+
+            if (formatter.type === 'simple-title-formatter') {
+
+                const tokens = {
+                    ':label': tooltipItem.label,
+                    ':value': tooltipItem.value,
+                    ':index': tooltipItem.index,
+                }
+
+                let title = formatter.options.format || ''
+
+                for (const token in tokens) {
+
+                    title = title.replace(new RegExp(token, 'g'), tokens[ token ])
+
+                }
+
+                return title
+
+            }
+
+        },
+        formatLabel(formatter, label, tooltipItem, data) {
+
+            if (formatter.type === 'basic-formatter') {
+
+                const { prefix = '', suffix = '', hideLabel, useComma } = formatter.options
+                const value = tooltipItem.yLabel
+                const finalValue = useComma ? commaNumber(value) : value
+
+                label = hideLabel ? '' : `${ label }: `
+
+                return `${ label }${ prefix } ${ finalValue } ${ suffix }`.trim()
+
+            }
+
+        },
         relativeHeight(number) {
-            return ( this.height * number ) / 100
+            return (this.height * number) / 100
         },
         relativeWidth(number) {
-            return ( this.width * number ) / 100
+            return (this.width * number) / 100
         },
         parseColor(colorPayload) {
 
@@ -145,7 +238,7 @@ export default {
             if (Array.isArray(colors)) {
 
                 colors.forEach((color, index) => {
-                    gradient.addColorStop(index / ( colors.length - 1 ), color)
+                    gradient.addColorStop(index / (colors.length - 1), color)
                 })
 
             } else {
