@@ -129,3 +129,69 @@ class SampleLineChart extends LineChartWidget
 }
 
 ```
+
+
+For Pie Chart, quite the same: 
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Nova\Dashboards\Widgets;
+
+use DigitalCreative\ChartJsWidget\DataSet;
+use DigitalCreative\ChartJsWidget\PieChartWidget;
+use DigitalCreative\ChartJsWidget\Style;
+use DigitalCreative\ChartJsWidget\ValueResult;
+use DigitalCreative\NovaDashboard\Filters;
+use Illuminate\Support\Collection;
+
+class SolarInPercentChart extends PieChartWidget
+{
+
+    public static $title = "Pourcentages";
+
+    public function resolveValue(Collection $options, Filters $filters): ValueResult
+    {
+
+        $baseConfiguration = Style::make()
+            ->fill('origin')
+            ->pointBorderWidth(2)
+            ->borderWidth(5)
+            ->pointHoverBorderWidth(4)
+            ->pointHoverRadius(8);
+
+        $config1 = $baseConfiguration->clone()
+            ->borderWidth(0)
+            ->hoverBackgroundColor('rgba(255, 159, 64, 0.9)')
+            ->backgroundColor('rgba(255, 159, 64, 1)');
+        $config2 = $baseConfiguration->clone()
+            ->borderWidth(0)
+            ->backgroundColor('rgba(54, 162, 235, 1)');
+
+        // Here is my problem, if I make only 1 serie, it will work, but everybody has same config / label
+        // If I put several datasets, instead of having quarters, I have circles.
+        // I think DataSet structure won't be able to manage those 2 types of charts.         
+        $dataset = DataSet::make("mylabel", [1,2,3], $baseConfiguration);
+
+        $result = ValueResult::make()
+            ->labels(['a','b','c']);
+
+        $result->addDataset(
+            $dataset
+        );
+
+        return $result;
+    }
+
+    public function fields(): array
+    {
+        return array_merge([
+        ], parent::fields());
+
+    }
+}
+
+
+```
