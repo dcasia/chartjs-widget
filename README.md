@@ -23,7 +23,7 @@ use DigitalCreative\ChartJsWidget\DataSet;
 use DigitalCreative\ChartJsWidget\Gradient;
 use DigitalCreative\ChartJsWidget\LineChartWidget;
 use DigitalCreative\ChartJsWidget\Style;
-use DigitalCreative\ChartJsWidget\ValueResult;
+use DigitalCreative\ChartJsWidget\Value;
 use DigitalCreative\NovaDashboard\Filters;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Fields\Select;
@@ -50,7 +50,7 @@ class SampleLineChart extends LineChartWidget
         ];
     }
 
-    public function resolveValue(Collection $options, Filters $filters): ValueResult
+    public function resolveValue(Collection $options, Filters $filters): Value
     {
 
         /**
