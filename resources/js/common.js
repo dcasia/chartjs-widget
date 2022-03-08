@@ -39,104 +39,13 @@ export default {
 
         this.$on('hook:beforeDestroy', () => unWatch())
 
-        const defaults = {
-            borderWidth: 0,
-            pointBorderWidth: 2,
-            pointHitRadius: 10,
-            pointRadius: 3,
-            pointHoverBorderWidth: 2,
-            pointHoverRadius: 4,
-            cubicInterpolationMode: 'monotone'
-        }
 
-        const data = {
-            labels: this.chartData.labels,
-            datasets: this.chartData.dataset.map(({
-                                                      data,
-                                                      label,
-                                                      backgroundColor,
-                                                      borderColor,
-                                                      hoverBackgroundColor,
-                                                      hoverBorderColor,
-                                                      pointBackgroundColor,
-                                                      pointBorderColor,
-                                                      pointHoverBackgroundColor,
-                                                      pointHoverBorderColor,
-                                                      ...settings
-                                                  }) => {
-
-                const options = _.defaults(settings, defaults)
-
-                return {
-                    ...options,
-                    backgroundColor: this.parseColor(backgroundColor),
-                    borderColor: this.parseColor(borderColor),
-                    hoverBackgroundColor: this.parseColor(hoverBackgroundColor),
-                    hoverBorderColor: this.parseColor(hoverBorderColor),
-                    pointBackgroundColor: this.parseColor(pointBackgroundColor),
-                    pointBorderColor: this.parseColor(pointBorderColor),
-                    pointHoverBackgroundColor: this.parseColor(pointHoverBackgroundColor),
-                    pointHoverBorderColor: this.parseColor(pointHoverBorderColor),
-                    label,
-                    data
-                }
-
-            })
-        }
-
-        this.renderChart(data, _.defaultsDeep({
-            responsive: true,
-            maintainAspectRatio: false,
-            tooltips: {
-                displayColors: false,
-                callbacks: {
-                    title: (tooltipItems, data) => {
-
-                        const items = []
-
-                        for (const item of tooltipItems) {
-
-                            const formatter = data.datasets[ item.datasetIndex ].tooltipTitleFormatter
-
-                            if (formatter) {
-
-                                items.push(this.formatTitle(formatter, item, data))
-
-                            } else {
-
-                                items.push(item.label)
-
-                            }
-
-                        }
-
-                        return _.filter(items)
-
-                    },
-                    label: (tooltipItem, data) => {
-
-                        let label = data.datasets[ tooltipItem.datasetIndex ].label || ''
-                        const formatter = data.datasets[ tooltipItem.datasetIndex ].tooltipFormatter
-
-                        if (formatter) {
-
-                            return this.formatLabel(formatter, label, tooltipItem, data)
-
-                        }
-
-                        if (label) {
-
-                            label += ': '
-
-                        }
-
-                        return label + tooltipItem.value
-
-                    }
-                }
-            }
-        }, this.options))
-
+        this.renderChartProxy();
+    },
+    watch: {
+        chartData() {
+            this.renderChartProxy();
+        },
     },
     computed: {
         options() {
@@ -147,6 +56,105 @@ export default {
         }
     },
     methods: {
+        renderChartProxy() {
+            const defaults = {
+                borderWidth: 0,
+                pointBorderWidth: 2,
+                pointHitRadius: 10,
+                pointRadius: 3,
+                pointHoverBorderWidth: 2,
+                pointHoverRadius: 4,
+                cubicInterpolationMode: 'monotone'
+            }
+
+            const data = {
+                labels: this.chartData.labels,
+                datasets: this.chartData.dataset.map(({
+                                                          data,
+                                                          label,
+                                                          backgroundColor,
+                                                          borderColor,
+                                                          hoverBackgroundColor,
+                                                          hoverBorderColor,
+                                                          pointBackgroundColor,
+                                                          pointBorderColor,
+                                                          pointHoverBackgroundColor,
+                                                          pointHoverBorderColor,
+                                                          ...settings
+                                                      }) => {
+
+                    const options = _.defaults(settings, defaults)
+
+                    return {
+                        ...options,
+                        backgroundColor: this.parseColor(backgroundColor),
+                        borderColor: this.parseColor(borderColor),
+                        hoverBackgroundColor: this.parseColor(hoverBackgroundColor),
+                        hoverBorderColor: this.parseColor(hoverBorderColor),
+                        pointBackgroundColor: this.parseColor(pointBackgroundColor),
+                        pointBorderColor: this.parseColor(pointBorderColor),
+                        pointHoverBackgroundColor: this.parseColor(pointHoverBackgroundColor),
+                        pointHoverBorderColor: this.parseColor(pointHoverBorderColor),
+                        label,
+                        data
+                    }
+
+                })
+            }
+
+            this.renderChart(data, _.defaultsDeep({
+                responsive: true,
+                maintainAspectRatio: false,
+                tooltips: {
+                    displayColors: false,
+                    callbacks: {
+                        title: (tooltipItems, data) => {
+
+                            const items = []
+
+                            for (const item of tooltipItems) {
+
+                                const formatter = data.datasets[ item.datasetIndex ].tooltipTitleFormatter
+
+                                if (formatter) {
+
+                                    items.push(this.formatTitle(formatter, item, data))
+
+                                } else {
+
+                                    items.push(item.label)
+
+                                }
+
+                            }
+
+                            return _.filter(items)
+
+                        },
+                        label: (tooltipItem, data) => {
+
+                            let label = data.datasets[ tooltipItem.datasetIndex ].label || ''
+                            const formatter = data.datasets[ tooltipItem.datasetIndex ].tooltipFormatter
+
+                            if (formatter) {
+
+                                return this.formatLabel(formatter, label, tooltipItem, data)
+
+                            }
+
+                            if (label) {
+
+                                label += ': '
+
+                            }
+
+                            return label + tooltipItem.value
+
+                        }
+                    }
+                }
+            }, this.options))
+        },
         formatTitle(formatter, tooltipItem, data) {
 
             if (formatter.type === 'no-title-formatter') {
