@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace DigitalCreative\ChartJsWidget\Formatters;
 
 /**
  * Class NoTitleFormatter
- *
- * @package DigitalCreative\ChartJsWidget\Formatters
  */
 class NoTitleFormatter extends Formatter
 {

@@ -1,17 +1,16 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace DigitalCreative\ChartJsWidget\Formatters;
 
 /**
  * Class SimpleTitleFormatter
  *
  * @method self format(string $value)
- *
- * @package DigitalCreative\ChartJsWidget\Formatters
  */
 class SimpleTitleFormatter extends Formatter
 {
-
     public function __construct(string $format)
     {
         parent::__construct();

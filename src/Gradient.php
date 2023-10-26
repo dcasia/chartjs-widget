@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace DigitalCreative\ChartJsWidget;
 
 class Gradient extends AbstractColor
@@ -12,9 +14,6 @@ class Gradient extends AbstractColor
 
     /**
      * Gradient constructor.
-     *
-     * @param array $colors
-     * @param int $direction
      */
     public function __construct(array $colors, int $direction = Gradient::HORIZONTAL)
     {

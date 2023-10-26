@@ -1,9 +1,5 @@
-import LineChartWidget from './components/LineChartWidget'
-import BarChartWidget from './components/BarChartWidget'
+import LineChartWidget from './components/LineChartWidget.vue'
 
-Nova.booting((Vue, router, store) => {
-
-    Vue.component('line-chart-widget', LineChartWidget)
-    Vue.component('bar-chart-widget', BarChartWidget)
-
+Nova.booting(app => {
+    app.component('line-chart-widget', LineChartWidget)
 })

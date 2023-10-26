@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace DigitalCreative\ChartJsWidget;
 
 class Color extends AbstractColor
@@ -8,8 +10,6 @@ class Color extends AbstractColor
 
     /**
      * Color constructor.
-     *
-     * @param string $color
      */
     public function __construct(string $color)
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace DigitalCreative\ChartJsWidget;
 
 use DigitalCreative\ChartJsWidget\Formatters\Formatter;
@@ -48,7 +50,6 @@ use Laravel\Nova\Makeable;
  * @method self steppedLine(bool $stepped = false)
  *
  * @property array|null data
- * @package DigitalCreative\ChartWidget
  */
 class DataSet extends Fluent
 {
@@ -57,15 +58,11 @@ class DataSet extends Fluent
     /**
      * Datasets constructor.
      *
-     * @param string $label
-     * @param array $data
      * @param array|Style $options
      */
     public function __construct(string $label, array $data, $options = [])
     {
-
         $this->label($label);
-
 
         if (Arr::isAssoc($data)) {
 
@@ -78,7 +75,6 @@ class DataSet extends Fluent
         }
 
         $this->attributes = array_merge($options instanceof Style ? $options->jsonSerialize() : $options, $this->attributes);
-
     }
 
     public function tooltipFormatter(Formatter $formatter): self
@@ -94,5 +90,4 @@ class DataSet extends Fluent
 
         return $this;
     }
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace DigitalCreative\ChartJsWidget\Formatters;
 
 /**
@@ -9,8 +11,6 @@ namespace DigitalCreative\ChartJsWidget\Formatters;
  * @method self suffix(string $value)
  * @method self useComma(bool $value)
  * @method self hideLabel(bool $value)
- *
- * @package DigitalCreative\ChartJsWidget\Formatters
  */
 class BasicFormatter extends Formatter
 {

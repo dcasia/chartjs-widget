@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace DigitalCreative\ChartJsWidget;
 
 use Illuminate\Support\Arr;
@@ -47,7 +49,6 @@ use Laravel\Nova\Makeable;
  * @method self steppedLine(bool $stepped = false)
  *
  * @property array|null data
- * @package DigitalCreative\Options
  */
 class Style extends Fluent
 {
@@ -56,7 +57,7 @@ class Style extends Fluent
     /**
      * Alias to set backgroundColor and hoverBackgroundColor
      *
-     * @param AbstractColor|string|array $color
+     * @param AbstractColor|array|string $color
      *
      * @return $this
      */
@@ -71,7 +72,7 @@ class Style extends Fluent
     /**
      * Alias to set point and border colors
      *
-     * @param AbstractColor|string|array $color
+     * @param AbstractColor|array|string $color
      *
      * @return $this
      */
@@ -89,19 +90,15 @@ class Style extends Fluent
 
     public function setColorIfNotExist($color, array $properties): self
     {
-
         foreach ($properties as $property) {
 
             if ($this->offsetExists($property) === false) {
-
                 $this->offsetSet($property, $color);
-
             }
 
         }
 
         return $this;
-
     }
 
     public function clone(): self
@@ -125,7 +122,6 @@ class Style extends Fluent
 
     public function jsonSerialize(): array
     {
-
         /**
          * Automatically casts the color presets into AbstractColor Objects
          */
@@ -163,11 +159,11 @@ class Style extends Fluent
 
                 }
 
-                $this->$attribute = new Gradient($value, $lastValue);
+                $this->{$attribute} = new Gradient($value, $lastValue);
 
             } else if (is_string($value)) {
 
-                $this->$attribute = new Color($value);
+                $this->{$attribute} = new Color($value);
 
             }
 
@@ -175,5 +171,4 @@ class Style extends Fluent
 
         return parent::jsonSerialize();
     }
-
 }

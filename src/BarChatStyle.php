@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace DigitalCreative\ChartJsWidget;
 
 /**
@@ -12,10 +14,7 @@ namespace DigitalCreative\ChartJsWidget;
  * @method self barThickness($value)
  * @method self maxBarThickness(int $value)
  * @method self minBarLength(int $value)
- *
- * @package DigitalCreative\ChartJsWidget
  */
 class BarChatStyle extends Style
 {
-
 }
