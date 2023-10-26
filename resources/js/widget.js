@@ -1,5 +1,5 @@
-import LineChartWidget from './components/LineChartWidget.vue'
+import Widget from './components/Widget.vue'
 
 Nova.booting(app => {
-    app.component('line-chart-widget', LineChartWidget)
+    app.component('chart-widget', Widget)
 })

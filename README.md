@@ -21,7 +21,7 @@ namespace App\Nova\Dashboards\Widgets;
 use DigitalCreative\ChartJsWidget\Color;
 use DigitalCreative\ChartJsWidget\DataSet;
 use DigitalCreative\ChartJsWidget\Gradient;
-use DigitalCreative\ChartJsWidget\LineChartWidget;
+use DigitalCreative\ChartJsWidget\Charts\LineChartWidget;
 use DigitalCreative\ChartJsWidget\Style;
 use DigitalCreative\ChartJsWidget\ValueResult;
 use DigitalCreative\NovaDashboard\Filters;
