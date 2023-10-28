@@ -9,7 +9,7 @@
   <img alt="Nova ChartJs Widget" src="https://raw.githubusercontent.com/dcasia/chartjs-widget/nova-4/screenshots/light.png">
 </picture>
 
-A table widget for laravel [Nova Dashboard](https://github.com/dcasia/nova-dashboard).
+A ChartJs widget for laravel [Nova Dashboard](https://github.com/dcasia/nova-dashboard).
 
 # Installation
 
@@ -20,6 +20,8 @@ composer require digital-creative/chartjs-widget
 ```
 
 ## Basic Usage
+
+Most of the configuration options can be inferred directly from the official [Chart.js documentation](https://www.chartjs.org/docs/latest/configuration/#configuration)
 
 ```php
 use DigitalCreative\ChartJsWidget\Charts\BarChartWidget;
