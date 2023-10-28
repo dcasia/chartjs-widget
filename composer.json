@@ -15,9 +15,8 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.4",
-        "ozdemirburak/iris": "^2.1",
-        "timothyasp/nova-color-field": "^1.0"
+        "php": ">=8.1",
+        "laravel/nova": "^4.28.0"
     },
     "autoload": {
         "psr-4": {
