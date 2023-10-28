@@ -21,7 +21,7 @@ composer require digital-creative/chartjs-widget
 
 ## Basic Usage
 
-Most of the configuration options can be inferred directly from the official [Chart.js documentation](https://www.chartjs.org/docs/latest/configuration/#configuration)
+Most of the configuration options can be inferred directly from the official [Chart.js documentation](https://www.chartjs.org/docs/latest/configuration/#configuration).
 
 ```php
 use DigitalCreative\ChartJsWidget\Charts\BarChartWidget;
@@ -69,15 +69,14 @@ class Example extends BarChartWidget
 
 All chart types are available:
 
-- DigitalCreative\ChartJsWidget\Charts\BarChartWidget
-- DigitalCreative\ChartJsWidget\Charts\BubbleChartWidget
-- DigitalCreative\ChartJsWidget\Charts\DoughnutChartWidget
-- DigitalCreative\ChartJsWidget\Charts\LineChartWidget
-- DigitalCreative\ChartJsWidget\Charts\PieChartWidget
-- DigitalCreative\ChartJsWidget\Charts\PolarAreaChartWidget
-- DigitalCreative\ChartJsWidget\Charts\RadarChartWidget
-- DigitalCreative\ChartJsWidget\Charts\ScatterChartWidget
-
+- [BarChartWidget](https://www.chartjs.org/docs/latest/charts/bar.html)
+- [BubbleChartWidget](https://www.chartjs.org/docs/latest/charts/bubble.html)
+- [DoughnutChartWidget](https://www.chartjs.org/docs/latest/charts/doughnut.html)
+- [LineChartWidget](https://www.chartjs.org/docs/latest/charts/line.html)
+- [PieChartWidget](https://www.chartjs.org/docs/latest/charts/doughnut.html#pie)
+- [PolarAreaChartWidget](https://www.chartjs.org/docs/latest/charts/polar.html)
+- [RadarChartWidget](https://www.chartjs.org/docs/latest/charts/radar.html)
+- [ScatterChartWidget](https://www.chartjs.org/docs/latest/charts/scatter.html)
 
 ## ⭐️ Show Your Support
 
