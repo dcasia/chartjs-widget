@@ -5,8 +5,8 @@
 [![License](https://img.shields.io/packagist/l/digital-creative/chartjs-widget)](https://github.com/dcasia/chartjs-widget/blob/main/LICENSE)
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dcasia/chartjs-widget/nova-4/screenshots/dark.png">
-  <img alt="Nova ChartJs Widget" src="https://raw.githubusercontent.com/dcasia/chartjs-widget/nova-4/screenshots/light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/dcasia/chartjs-widget/main/screenshots/dark.png">
+  <img alt="Nova ChartJs Widget" src="https://raw.githubusercontent.com/dcasia/chartjs-widget/main/screenshots/light.png">
 </picture>
 
 A ChartJs widget for laravel [Nova Dashboard](https://github.com/dcasia/nova-dashboard).
