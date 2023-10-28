@@ -165,7 +165,13 @@ abstract class ChartJsWidget extends Widget
             'value' => $value,
         ]);
 
-        foreach ($this->meta as $attribute => $_) {
+        $unset = [
+            'tabs', 'leadingIcon', 'trailingIcon', 'title', 'buttonTitle',
+            'padding', 'animation', 'legend', 'tooltip', 'elements', 'scales',
+            'backgroundColorDark', 'backgroundColorLight',
+        ];
+
+        foreach ($unset as $attribute) {
             unset($this->meta[ $attribute ]);
         }
 
