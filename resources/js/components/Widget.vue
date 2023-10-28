@@ -1,76 +1,133 @@
 <template>
 
-    <widget v-bind="$props" no-padding>
+    <Card class="chartjs-widget flex justify-center items-center overflow-hidden"
+          :class="{ 'p-1': activeTab.title }"
+          :style="{
+              '--background-color-dark': activeTab.backgroundColorDark,
+              '--background-color-light': activeTab.backgroundColorLight
+          }">
 
-        <template v-slot="{ value, namespace, options }">
+        <LoadingView
+            :loading="isLoading"
+            class="flex flex-col justify-center items-center w-full h-full">
 
-            <div class="flex flex-col flex-1 h-full">
+            <div class="flex w-full justify-between mb-1" v-if="activeTab?.title">
 
-                <div v-if="options.widget_title" class="px-6 py-4 text-base text-80 font-bold">
-                    {{ options.widget_title }}
-                </div>
+                <div class="p-2 text-sm font-bold" v-if="activeTab?.title">{{ activeTab.title }}</div>
 
-                <component :is="component"
-                           v-if="value.dataset.length"
-                           class="absolute flex-1 w-full h-full z-1"
-                           :coordinates="coordinates"
-                           :extra="meta.meta"
-                           :width="width"
-                           :height="height"
-                           :options="options"
-                           :namespace="namespace"
-                           :chart-data="value"/>
+                <div class="flex justify-end space-x-1" v-if="value.length > 1">
 
-                <div v-if="!value.dataset.length" class="flex flex-col items-center h-full justify-center">
+                    <Button
+                        class="whitespace-nowrap"
+                        v-for="{ key, leadingIcon, trailingIcon, buttonTitle } of value"
+                        :variant="activeTabKey === key ? 'link' : 'ghost'"
+                        :leading-icon="leadingIcon"
+                        :trailing-icon="trailingIcon"
+                        @click="activeTabKey = key">
 
-                    <NoDataIcon class="mb-3 text-primary" style="height: 50%"/>
+                        {{ buttonTitle }}
 
-                    <h3 class="text-base text-80 font-normal">
-                        {{ __('There is no data to be shown.') }}
-                    </h3>
+                    </Button>
 
                 </div>
 
             </div>
 
-        </template>
+            <div class="bg-[var(--chart-background-color)] w-full h-full rounded overflow-hidden">
 
-    </widget>
+                <component
+                    :is="activeTab.type"
+                    :key="activeTabKey"
+                    :options="chartOptions"
+                    :data="currentValue"/>
+
+            </div>
+
+        </LoadingView>
+
+    </Card>
 
 </template>
 
 <script>
 
-import 'chartjs-plugin-colorschemes'
-import NoDataIcon from './NoDataIcon'
+    import { Chart, elements, plugins, scales } from 'chart.js'
+    import ChartDataLabels from 'chartjs-plugin-datalabels'
+    import { Bar, Bubble, Doughnut, Line, Pie, PolarArea, Radar, Scatter } from 'vue-chartjs'
+    import { Button } from 'laravel-nova-ui'
 
-export default {
-    name: 'ChartJsWidget',
-    components: { NoDataIcon },
-    props: {
-        meta: { type: Object, default: null },
-        card: { type: Object, default: null },
-        coordinates: { type: Object }
-    },
-    data() {
+    Chart.register(
+        plugins,
+        elements,
+        scales,
+        ChartDataLabels,
+    )
 
-        return {
-            component: null,
-            width: 0,
-            height: 0
-        }
-    },
-    created() {
+    export default {
+        components: {
+            Line,
+            Bar,
+            Bubble,
+            PolarArea,
+            Radar,
+            Scatter,
+            Doughnut,
+            Pie,
+            Button,
+        },
+        props: [ 'card' ],
+        data() {
+            return {
+                activeTabKey: this.card.value[ 0 ].key,
+            }
+        },
+        computed: {
+            chartOptions() {
 
-        this.$nextTick(() => {
+                const plugins = {}
 
-            this.width = this.$el.clientWidth
-            this.height = this.$el.clientHeight
+                if (this.activeTab.legend) {
+                    plugins.legend = this.activeTab.legend
+                }
 
-        })
+                if (this.activeTab.tooltip) {
+                    plugins.tooltip = this.activeTab.tooltip
+                }
 
+                return {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: this.activeTab.animation,
+                    elements: this.activeTab.elements,
+                    scales: this.activeTab.scales,
+                    layout: {
+                        padding: this.activeTab.padding,
+                    },
+                    plugins,
+                }
+            },
+            activeTab() {
+                return this.value.find(tab => tab.key === this.activeTabKey) ?? this.value[ 0 ]
+            },
+            currentValue() {
+                return this.activeTab?.value
+            },
+        },
     }
 
-}
-
 </script>
+
+<style lang="scss">
+
+    .dark .chartjs-widget {
+        --chart-background-color: var(--background-color-dark, var(--bg-gray-700))
+    }
+
+    .chartjs-widget {
+        @apply bg-gray-200 dark:bg-gray-700 #{!important};
+
+        --chart-background-color: var(--background-color-light, var(--bg-gray-200))
+    }
+
+</style>
+

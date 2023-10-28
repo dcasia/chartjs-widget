@@ -1,9 +1,17 @@
 {
     "name": "digital-creative/chartjs-widget",
-    "description": "A Laravel Nova asset.",
+    "description": "A chartjs widget for laravel nova-dashboard.",
     "keywords": [
         "laravel",
-        "nova"
+        "nova",
+        "chartjs",
+        "dashboard",
+        "nova-dashboard"
+    ],
+    "authors": [
+        {
+            "name": "Rafael Milewski"
+        }
     ],
     "license": "MIT",
     "require": {
