@@ -1,6 +1,11 @@
 <template>
 
-    <Card class="chartjs-widget flex justify-center items-center overflow-hidden" :class="{ 'p-1': activeTab.title }">
+    <Card class="chartjs-widget flex justify-center items-center overflow-hidden"
+          :class="{ 'p-1': activeTab.title }"
+          :style="{
+              '--background-color-dark': activeTab.backgroundColorDark,
+              '--background-color-light': activeTab.backgroundColorLight
+          }">
 
         <LoadingView
             :loading="isLoading"
@@ -28,7 +33,7 @@
 
             </div>
 
-            <div class="bg-gray-200 w-full h-full rounded overflow-hidden">
+            <div class="bg-[var(--chart-background-color)] w-full h-full rounded overflow-hidden">
 
                 <component
                     :is="activeTab.type"
@@ -46,24 +51,16 @@
 
 <script>
 
-    import { Chart, elements, scales, plugins } from 'chart.js'
-    import {
-        Line,
-        Bar,
-        Bubble,
-        PolarArea,
-        Radar,
-        Scatter,
-        Doughnut,
-        Pie,
-    } from 'vue-chartjs'
-
+    import { Chart, elements, plugins, scales } from 'chart.js'
+    import ChartDataLabels from 'chartjs-plugin-datalabels'
+    import { Bar, Bubble, Doughnut, Line, Pie, PolarArea, Radar, Scatter } from 'vue-chartjs'
     import { Button } from 'laravel-nova-ui'
 
     Chart.register(
         plugins,
         elements,
         scales,
+        ChartDataLabels,
     )
 
     export default {
@@ -122,8 +119,14 @@
 
 <style lang="scss">
 
+    .dark .chartjs-widget {
+        --chart-background-color: var(--background-color-dark, var(--bg-gray-700))
+    }
+
     .chartjs-widget {
         @apply bg-gray-200 dark:bg-gray-700 #{!important};
+
+        --chart-background-color: var(--background-color-light, var(--bg-gray-200))
     }
 
 </style>

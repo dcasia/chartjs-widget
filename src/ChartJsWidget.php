@@ -26,6 +26,13 @@ abstract class ChartJsWidget extends Widget
         return $this->withMeta([ 'buttonTitle' => $title ]);
     }
 
+    public function backgroundColor(string $dark, ?string $light = null): self
+    {
+        return $this
+            ->withMeta([ 'backgroundColorDark' => $dark ])
+            ->withMeta([ 'backgroundColorLight' => $light ?: $dark ]);
+    }
+
     public function disableAnimation(): self
     {
         return $this->withMeta([ 'animation' => false ]);
@@ -98,21 +105,21 @@ abstract class ChartJsWidget extends Widget
         return $this->withMeta([ 'leadingIcon' => $leadingIcon, 'trailingIcon' => $trailingIcon ]);
     }
 
-    public function padding(int $top, ?int $left = null, ?int $bottom = null, ?int $right = null): self
+    public function padding(?int $top = null, ?int $left = null, ?int $bottom = null, ?int $right = null): self
     {
         return $this->withMeta([
             'padding' => [
                 'top' => $top,
-                'left' => $left ?? $top,
-                'bottom' => $bottom ?? $top,
-                'right' => $right ?? $left ?? $top,
+                'left' => $left,
+                'bottom' => $bottom,
+                'right' => $right,
             ],
         ]);
     }
 
     public function addTab(string $widget): self
     {
-        if (is_subclass_of($widget, static::class)) {
+        if (!is_subclass_of($widget, ChartJsWidget::class)) {
             throw new Exception('Please provide an class string of another ChartJs widget');
         }
 
@@ -153,6 +160,8 @@ abstract class ChartJsWidget extends Widget
             'tooltip' => $this->getMeta('tooltip'),
             'elements' => $this->getMeta('elements'),
             'scales' => $this->getMeta('scales'),
+            'backgroundColorDark' => $this->getMeta('backgroundColorDark'),
+            'backgroundColorLight' => $this->getMeta('backgroundColorLight'),
             'value' => $value,
         ]);
 
